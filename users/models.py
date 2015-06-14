@@ -19,7 +19,8 @@ class User(models.Model):
 	# email
 	email = models.EmailField(blank=True)
 	# avatar path
-	avatar_path = models.CharField(max_length=200, blank=True)
+	#avatar_path = models.CharField(max_length=200, blank=True)
+	avatar = models.ImageField(upload_to='avatar', blank=True)
 	# register date
 	register_date = models.DateTimeField(auto_now_add=True)
 	# password

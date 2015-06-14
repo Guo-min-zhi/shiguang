@@ -61,6 +61,13 @@ def register(request):
 	nick_name = request.POST.get('username','')
 	sex = request.POST.get('sex',0)
 	birthday = request.POST.get('birthday',None)
+	#avatar = request
+	form = UploadFileForm(request.POST, request.FILES)
+	if form.is_valid():
+		print '=========='
+		print request.FILES['avatar']
+		print '============'
+		#handle_uploaded_file(request.FILES['avatar'])
 	
 	# 2. Phone number has not been registered.
 	if isRegistered(phone_number, phone_country_code):
