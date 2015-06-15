@@ -2,7 +2,10 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Authcode, User
 from .functions import *
+import logging
 # Create your views here.
+
+logger = logging.getLogger('shiguang')
 
 # Send the auth code to phone number.
 def auth(request):
@@ -62,11 +65,16 @@ def register(request):
 	sex = request.POST.get('sex',0)
 	birthday = request.POST.get('birthday',None)
 	#avatar = request
-	form = UploadFileForm(request.POST, request.FILES)
-	if form.is_valid():
-		print '=========='
-		print request.FILES['avatar']
-		print '============'
+	print("--------------------")
+	avatar = request.FILES['avatar']
+	handle_uploaded_file(avatar)
+
+	# form = UploadFileForm(request.POST, request.FILES)
+	# if form.is_valid():
+	# 	print '=========='
+	# 	print request.FILES['avatar']
+	# 	print '============'
+	print("--------------------")
 		#handle_uploaded_file(request.FILES['avatar'])
 	
 	# 2. Phone number has not been registered.
@@ -140,8 +148,15 @@ def userInfo(request):
 		return JsonResponse(data)
 
 def all(request):
+	logger.info('------')
+	print '*********'
 	user = User.objects.get(pk=1)
 	return JsonResponse(jsonUser(user))
+
+def handle_uploaded_file(f):
+    with open('/Users/guominzhi/workspace/shiguang/img/a.jpg', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
 
 
 
