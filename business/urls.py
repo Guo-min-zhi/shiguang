@@ -5,7 +5,8 @@ urlpatterns = [
 	
 	# Get all shiguang 
 	# ex: /business/shiguang/all
-	url(r'^shiguang/all/(?P<uid>[0-9]+)/$', views.all, name='all'),
+	#url(r'^shiguang/all/(?P<uid>[0-9]+)/(?P<page>[0-9]+)/$', views.all, name='all'),
+	url(r'^shiguang/all/$', views.all, name='all'),
 
 	# Create a shiguang.
 	# ex: /business/shiguang/add
@@ -34,4 +35,10 @@ urlpatterns = [
 	# Get record info
 	# ex:
 	url(r'^shiguang/get/record/info/$', views.getRecordInfo, name='getRecordInfo'),
+
+	# Get all records according to shiguang id
+	# ex:
+	url(r'^shiguang/get/record/all/$', views.getAllRecordsOfShiguang, name='getAllRecordsOfShiguang'),
+
+	url(r'^$', views.index, name='index'),
 ]

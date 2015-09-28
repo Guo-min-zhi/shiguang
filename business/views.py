@@ -6,20 +6,44 @@ from .functions import *
 from .models import Shiguang, Record, RecordPicture
 import logging
 from shiguang.settings import *
+from django.template import RequestContext, loader
 
 logger = logging.getLogger('shiguang')
 
 # Create your views here.
-def all(request, uid):
+
+def index(request):
+	context = {'name': 'guominzhi'}
+	return render(request, 'business/index.html', context)
+
+def all(request):
 	data = {}
-	logger.info('get all shiguang of %s', uid)
+	PAGE_SIZE = 5
 	if request.method == 'GET':
+		uid = request.GET.get('uid', '')
+		page = request.GET.get('page', 1)
+		logger.info('Get all shiguang, uid = %s, page = %s', uid, page)
+		
+		try:
+			page = int(page)
+			if page < 1:
+				page = 1
+		except Exception:
+			page = 1
+
 		data['data'] = []
 		lists = Shiguang.objects.filter(user_id=uid)
+		pager = Paginator(lists, PAGE_SIZE)
+		try:
+			lists = pager.page(page)
+		except Exception:
+			lists = pager.page(1)
+
 		for item in lists:
 			data['data'].append(jsonShiguang(item))
 
 		data['code'] = 1
+		#data['total_page'] = pager.num_pages
 		data['msg'] = 'get all shiguang list'
 		return JsonResponse(data)
 	else:
@@ -32,18 +56,28 @@ def add(request):
 	data = {}
 	if request.method == 'POST':
 		user_id = request.POST.get('uid', 1)
-		name = request.POST.get('name', '')
+		theme = request.POST.get('name', '')
 		description = request.POST.get('description', '')
 		start_time = request.POST.get('start', '')
 		end_time = request.POST.get('end', '')
 		tags = request.POST.get('tags','')
-		
-		cover = request.FILES['cover']
-		cover_path = os.path.join(MEDIA_ROOT,'cover',user_id, 'cover'+str(generateRandomNumber())+'.jpg')
-		handle_shiguang_cover_file(cover, cover_path)
+		logger.info("add shiguang,user_id=%s,theme=%s,description=%s,start_time=%s,end_time=%s,tags=%s", user_id,theme,description,start_time,end_time,tags)
 
-		shiguang = Shiguang(name=name,description=description,start_time=start_time,end_time=end_time,tags=tags,user_id=user_id)
-		shiguang.save()
+		try:
+			cover = request.FILES['cover']
+			cover_path = os.path.join(MEDIA_ROOT,'cover', user_id+'_cover_'+str(generateRandomNumber())+'.jpg')
+			handle_shiguang_cover_file(cover, cover_path)
+			logger.info("save cover success")	
+
+			shiguang = Shiguang(theme=theme,description=description,start_time=start_time,end_time=end_time,tags=tags,user_id=user_id)
+			shiguang.save()
+			logger.info("save shiguang success")
+		except Exception, e:
+			logger.error(e)
+			data['code'] = 0
+			data['msg'] = 'create error'
+			data['data'] = ''
+			return JsonResponse(data)
 
 		data['code'] = 1
 		data['msg'] = 'Create shiguang success.'
@@ -163,6 +197,33 @@ def getRecordsOfMonth(request):
 	data['msg'] = 'This api occurs error'
 	data['data'] = []
 	return JsonResponse(data)
+
+def getAllRecordsOfShiguang(request):
+	data = {}
+	if request.method == 'GET':
+		sid = request.GET.get('sid', None)
+		logger.info("get records of shiguang id = %s", sid)
+		try:
+			data['data'] = []
+			if sid != None:
+				records = Record.objects.filter(shiguang_id=sid)
+				for item in records:
+					data['data'].append(jsonRecord(item))
+
+			data['code'] = 1
+			data['msg'] = "get records of %s-shiguang" % sid
+			return JsonResponse(data)
+		except Exception, e:
+			raise e
+			data['code'] = 0
+			data['msg'] = 'This api occurs error.'
+			data['data'] = []
+			return JsonResponse(data)
+	else:
+		data['code'] = 0
+		data['msg'] = 'This url need GET method.'
+		data['data'] = []
+		return JsonResponse(data)
 
 def getRecordInfo(request):
 	data = {}

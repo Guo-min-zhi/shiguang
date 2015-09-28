@@ -17,7 +17,7 @@ urlpatterns = [
 
 	# Get user infomation
 	# ex: /users/info/{userid}
-	url(r'^info/$', views.userInfo, name='userInfo'),
+	url(r'^userInfo/$', views.userInfo, name='userInfo'),
 
 	#===========
 	# Get all users, for test

@@ -2,7 +2,10 @@ from django.shortcuts import get_object_or_404
 from .models import User
 import random
 from .CCPRestSDK import REST
+import logging
 # functions about users
+
+logger = logging.getLogger('shiguang')
 
 # account id
 ACCOUNT_SID = "8a48b5514d32a2a8014d94686ad946c4"
@@ -57,7 +60,13 @@ def isRegistered(phone_number, phone_country_code):
 	except:
 		return False
 
-
+def returnData(code, msg, data):
+	data = {}
+	data['code'] = code
+	data['msg'] = msg
+	data['data'] = data
+	logging.info("Return data: code=%s, msg=%s, data=%s.", code, msg, data)
+	return data
 
 
 

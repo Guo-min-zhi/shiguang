@@ -8,10 +8,12 @@ class Shiguang(models.Model):
 	# name
 	theme = models.CharField(max_length=100)
 	# description
-	description = models.TextField(max_length=1000)
+	description = models.CharField(max_length=2000)
 	# create time
 	create_time = models.DateTimeField(auto_now_add=True)
 
+	#start time
+	start_time = models.DateTimeField(null=True, blank=True)
 	# end time
 	end_time = models.DateTimeField(null=True, blank=True)
 	# tag one

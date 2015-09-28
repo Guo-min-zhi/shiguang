@@ -16,6 +16,7 @@ def jsonShiguang(shiguang):
 
 def jsonRecord(record):
 	data = {}
+	data['id'] = record.id
 	data['content'] = record.content
 	data['create_time'] = record.create_time
 	return data
