@@ -1,3 +1,5 @@
+#!/usr/local/bin/python
+#-*- coding:utf-8 -*-
 from django.db import models
 
 # Create your models here.
@@ -12,7 +14,7 @@ class User(models.Model):
 	nick_name = models.CharField(max_length=100, blank=True)
 	# real name
 	real_name = models.CharField(max_length=100, blank=True)
-	# sex
+	# sex, 1 for male, 0 for female.
 	sex = models.IntegerField(default=0, blank=True)
 	# birthday
 	birthday = models.DateField(blank=True, null=True)
@@ -48,3 +50,17 @@ class AuthcodeHistory(models.Model):
 	auth_code = models.IntegerField()
 	# send time
 	send_time = models.DateTimeField()
+
+class FeedBack(models.Model):
+	"""docstring for FeedBack"""
+	create_time = models.DateTimeField(auto_now_add=True)
+	feedback = models.CharField(max_length=200, null=True, blank=True)
+	contact = models.CharField(max_length=50, null=True, blank=True)
+	user = models.ForeignKey(User)
+
+
+
+
+
+
+

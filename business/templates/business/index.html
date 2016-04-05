@@ -4,9 +4,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>演示：HTML5+CSS3实现的响应式垂直时间轴</title>
-<link rel="stylesheet" href="http://www.helloweba.com/demo/css/main.css" />
+<title>timeline</title>
+<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+<!-- <link href="{% static 'users/css/navbar-fixed-top.css' %}" rel="stylesheet"> -->
+<link rel="stylesheet" href="{% static 'business/main.css' %}" />
 <link rel="stylesheet" href="{% static 'business/style.css' %}" />
+
+
+
 <style type="text/css">
 h2.top_title{border-bottom:none;background:none;text-align:center;line-height:32px; font-size:20px}
 h2.top_title span{font-size:12px; color:#666;font-weight:500}
@@ -14,14 +19,46 @@ h2.top_title span{font-size:12px; color:#666;font-weight:500}
 </head>
 
 <body>
-<div id="header">
-   <div id="logo"><h1><a href="http://www.helloweba.com" title="返回helloweba首页">helloweba</a></h1></div>
-</div>
 
-<h2 class="top_title"><a href="http://www.helloweba.com/view-blog-285.html">HTML5+CSS3实现的响应式垂直时间轴</a><br/><span>请使用IE9+或Chrome，Firefox高级浏览器或手机访问本页</span></h2>
+<!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">时光</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">我的时光</a></li>
+            <li><a href="#about">创建时光</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 个人信息 <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/users/info">个人信息</a></li>
+                <li><a href="#">头像</a></li>
+                <li><a href="#">修改密码</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="./">退出</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
 
 <section id="cd-timeline" class="cd-container">
-	<div class="cd-timeline-block">
+	<!-- <div class="cd-timeline-block">
 		<div class="cd-timeline-img cd-picture">
 			<img src="{% static 'business/images/cd-icon-picture.svg' %}" alt="Picture">
 		</div>
@@ -32,8 +69,24 @@ h2.top_title span{font-size:12px; color:#666;font-weight:500}
 			<a href="http://www.helloweba.com/view-blog-285.html" class="cd-read-more" target="_blank">阅读全文</a>
 			<span class="cd-date">2015-01-06</span>
 		</div>
-	</div>
-	<div class="cd-timeline-block">
+	</div> -->
+
+	{% for item in data %}
+		<div class="cd-timeline-block">
+			<div class="cd-timeline-img cd-picture">
+				<img src="{% static 'business/images/cd-icon-picture.svg' %}" alt="Picture">
+			</div>
+
+			<div class="cd-timeline-content">
+				<h2>{{item.theme}}</h2>
+				<p>{{item.description}}</p>
+				<a href="#" class="cd-read-more" target="_blank">时光详情</a>
+				<span class="cd-date">{{item.create_time|date:"Y-m-d H:i:s"}}</span>
+			</div>
+		</div>
+	{% endfor %}
+	
+	<!-- <div class="cd-timeline-block">
 		<div class="cd-timeline-img cd-movie">
 			<img src="{% static 'business/images/cd-icon-movie.svg' %}" alt="Movie">
 		</div>
@@ -80,11 +133,11 @@ h2.top_title span{font-size:12px; color:#666;font-weight:500}
 			<a href="http://www.helloweba.com/view-blog-281.html" class="cd-read-more" target="_blank">阅读全文</a>
 			<span class="cd-date">2014-12-05</span>
 		</div>
-	</div>
+	</div> -->
 </section>
 
 <div id="footer">
-    <p>Powered by helloweba.com  允许转载、修改和使用本站的DEMO，但请注明出处：<a href="http://www.helloweba.com">www.helloweba.com</a></p>
+    <p>Powered by Shiguang Team </p>
 </div>
 </body>
 </html>

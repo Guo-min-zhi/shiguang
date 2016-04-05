@@ -17,9 +17,12 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from shiguang.views import homepage
 
 urlpatterns = [
+    url(r'^$', homepage),
 	url(r'^users/', include('users.urls', namespace='users')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^business/', include('business.urls', namespace='business')),
+    url(r'^version/', include('version.urls', namespace='version')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

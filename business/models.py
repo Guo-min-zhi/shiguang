@@ -1,3 +1,5 @@
+#!/usr/local/bin/python
+#-*- coding:utf-8 -*-
 from django.db import models
 from users.models import User
 
@@ -8,7 +10,7 @@ class Shiguang(models.Model):
 	# name
 	theme = models.CharField(max_length=100)
 	# description
-	description = models.CharField(max_length=2000)
+	description = models.CharField(max_length=2000, null=True, blank=True)
 	# create time
 	create_time = models.DateTimeField(auto_now_add=True)
 
@@ -36,6 +38,7 @@ class Shiguang(models.Model):
 class Record(models.Model):
 	"""docstring for record"""
 	content = models.CharField(max_length=1000)
+	date = models.DateField(null=True, blank=True)
 	create_time = models.DateTimeField(auto_now_add=True)
 	shiguang = models.ForeignKey(Shiguang)
 

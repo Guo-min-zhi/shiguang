@@ -1,40 +1,51 @@
+#!/usr/local/bin/python
+#-*- coding:utf-8 -*-
 from django.shortcuts import get_object_or_404
 from .models import User
 import random
 from .CCPRestSDK import REST
 import logging
+from sms import *
 # functions about users
 
 logger = logging.getLogger('shiguang')
 
-# account id
-ACCOUNT_SID = "8a48b5514d32a2a8014d94686ad946c4"
-# account token
-ACCOUNT_TOKEN = "78def423d2764eabadf89b30d246e5fc"
-# app id
-APP_ID = "8a48b5514d32a2a8014d9468b91d46c7"
-# server ip
-SERVER_IP = "sandboxapp.cloopen.com"
-# server port
-SERVER_PORT = "8883"
-# software version
-SOFT_VERSION = "2013-12-26"
+# # account id
+# ACCOUNT_SID = "8a48b5514d32a2a8014d94686ad946c4"
+# # account token
+# # ACCOUNT_TOKEN = "78def423d2764eabadf89b30d246e5fc"
+# ACCOUNT_TOKEN = "78def423d2764eabadf89b30d246e5fc"
+# # app id
+# # APP_ID = "8a48b5514d32a2a8014d9468b91d46c7"
+# APP_ID = "aaf98f894d7439d8014d948760471801"
+# # server ip
+# # SERVER_IP = "sandboxapp.cloopen.com"
+# SERVER_IP = "app.cloopen.com"
+# # server port
+# SERVER_PORT = "8883"
+# # software version
+# SOFT_VERSION = "2013-12-26"
 
 def generateRandomNumber():
 	return random.randint(100000, 999999)
 
 def sendAuthcode(phone_number, code):
+	text = '您的验证码是:'+str(code)
+	responseLine = send_sms(text, phone_number)
+	return responseLine[1]
+
 	#init
-	rest = REST(SERVER_IP, SERVER_PORT, SOFT_VERSION)
-	rest.setAccount(ACCOUNT_SID, ACCOUNT_TOKEN)
-	rest.setAppId(APP_ID)
-	#send phone message auth code
-	result = rest.sendTemplateSMS(phone_number,[code, '5'],1)	
-	return result['statusCode'] == "000000"
+	# rest = REST(SERVER_IP, SERVER_PORT, SOFT_VERSION)
+	# rest.setAccount(ACCOUNT_SID, ACCOUNT_TOKEN)
+	# rest.setAppId(APP_ID)
+	# #send phone message auth code
+	# result = rest.sendTemplateSMS(phone_number,[code, '5'],1)	
+	# return result['statusCode'] == "000000"
 
 
 def jsonUser(user):
 	data = {}
+	data['id'] = user.id
 	data['phone_number'] = user.phone_number
 	data['nick_name'] = user.nick_name
 	data['real_name'] = user.real_name
@@ -54,7 +65,8 @@ def jsonAuthcode(authcode):
 
 def isRegistered(phone_number, phone_country_code):
 	try:
-		if User.objects.get(phone_number=phone_number, phone_country_code=phone_country_code):
+		if User.objects.get(phone_number=phone_number):
+		# if User.objects.get(phone_number=phone_number, phone_country_code=phone_country_code):
 			return True
 		return False	
 	except:

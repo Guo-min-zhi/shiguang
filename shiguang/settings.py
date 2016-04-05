@@ -26,7 +26,7 @@ SECRET_KEY = 'm)@=nc(cn%juamek#_!&xa_)2er^yueo8o5&s48(nh8m9-f471'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'users',
     'business',
+    'version',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -138,7 +139,12 @@ LOGGING = {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
             # 'filters': ['special']
-        }
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/Users/guominzhi/workspace/shiguang/log/debug.log',
+        },
     },
     'loggers': {
         'django': {
@@ -152,8 +158,8 @@ LOGGING = {
             'propagate': False,
         },
         'shiguang': {
-            'handlers': ['console', 'mail_admins'],
-            'level': 'INFO',
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
             # 'filters': ['special']
         }
     }
